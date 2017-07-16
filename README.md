@@ -9,4 +9,3 @@
 <p>make</p>
 <p>make install</p>
 </code>
-<p>This repository allows for two different build configurations. The default builds the API assuming statically allocated structures, as in they cannot be resized post-allocation. The repository also supports dynamically-allocated structures, meaning that a size is not specified upon calling chash_init(), and buckets are allocated as needed. This configuration will result in slightly slower operation of the structure, but is useful when the API is employed in environments where efficiency is not key.</p>
