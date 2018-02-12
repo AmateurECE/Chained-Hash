@@ -30,5 +30,6 @@ clean: force
 	rm -f *.o
 	rm -f chain-hash
 	rm -f *.dSYM
+	$(MAKE) -C Singly-Linked-List/ clean
 
 ###############################################################################

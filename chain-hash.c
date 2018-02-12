@@ -28,7 +28,7 @@
 #include <time.h>
 
 #include "chain-hash.h"
-#include "linkedlist.h"
+#include "list.h"
 
 /*******************************************************************************
  * STATIC FUNCTION PROTOTYPES
