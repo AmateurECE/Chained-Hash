@@ -3,9 +3,4 @@
 
 <p>The goal for this repository is to not only contain the code for implementing a chained hash table, but also a few common hash functions to use with the API. These are not currently included, but will be in a future commit.</p>
 
-<p><b>Building:</b> To build this repository on any system, one follows the traditional Autotools procedure.</p>
-<code>
-<p>./configure</p>
-<p>make</p>
-<p>make install</p>
-</code>
+<p><b>Building:</b> To build the test source on your system, simply run `make`.
