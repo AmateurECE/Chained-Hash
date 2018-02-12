@@ -9,7 +9,7 @@
  *
  * CREATED:	    07/15/2017
  *
- * LAST EDITED:	    07/15/2017
+ * LAST EDITED:	    02/12/2018
  ***/
 
 /**
@@ -29,7 +29,7 @@
  * INCLUDES
  ***/
 
-#include "linkedlist.h"
+#include "list.h"
 
 /*******************************************************************************
  * MACRO DEFINITIONS
@@ -65,7 +65,7 @@ typedef struct _CHash_ {
   int (*hash)(const void *);
   int (*match)(const void *, const void *);
   void (*destroy)(void *);
-  List ** table;
+  list ** table;
 
 } CHash;
 

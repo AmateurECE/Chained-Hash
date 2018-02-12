@@ -7,7 +7,7 @@
  *
  * CREATED:	    07/15/2017
  *
- * LAST EDITED:	    07/15/2017
+ * LAST EDITED:	    02/12/2018
  ***/
 
 /**
@@ -77,12 +77,12 @@ CHash * chash_init(int size,
 		 .match = match,
 		 .destroy = destroy,
 		 .size = 0,
-		 .table = calloc(size - 1, sizeof(List *))
+		 .table = calloc(size - 1, sizeof(list *))
   };
 
   for (int i = 0; i < size; i++) {
-    tbl->table[i] = malloc(sizeof(List));
-    list_init(tbl->table[i], tbl->destroy);
+    if ((tbl->table[i] = list_create(tbl->destroy)) == NULL)
+      return NULL; /* TODO: chash_init - Fix in case of mem leak? */
   }
 
   return tbl;
@@ -116,7 +116,7 @@ int chash_insert(CHash * tbl, const void * data)
   if (tbl->table[bucket] == NULL)
     return -1;
 
-  List * tmplist = tbl->table[bucket];
+  list * tmplist = tbl->table[bucket];
   if (!list_insnxt(tmplist, list_tail(tmplist), data))
     tbl->size++;
 
@@ -144,8 +144,8 @@ int chash_remove(CHash * tbl, void ** data)
   if (*data != NULL) {
     int bucket = tbl->hash(*data) % tbl->buckets;
 
-    ListElm * prev = NULL;
-    for (ListElm * elmt = list_head(tbl->table[bucket]);
+    listelmt * prev = NULL;
+    for (listelmt * elmt = list_head(tbl->table[bucket]);
 	   elmt != NULL; elmt = list_next(elmt)) {
       if (tbl->match(*data, list_data(elmt))) {
 
@@ -190,7 +190,7 @@ int chash_lookup(CHash * tbl, void ** data)
   if (*data != NULL) {
     int bucket = tbl->hash(*data) % tbl->buckets;
 
-    for (ListElm * elmt = list_head(tbl->table[bucket]);
+    for (listelmt * elmt = list_head(tbl->table[bucket]);
 	 elmt != NULL; elmt = list_next(elmt)) {
       if (tbl->match(*data, list_data(elmt))) {
 	*data = list_data(elmt);
@@ -241,7 +241,7 @@ void chash_traverse(CHash * tbl, void (*callback)(void *))
 void chash_destroy(CHash * tbl)
 {
   for (int i = 0; i < tbl->buckets; i++)
-    list_dest(tbl->table[i]);
+    list_destroy(&tbl->table[i]);
 
   free(tbl);
 }
