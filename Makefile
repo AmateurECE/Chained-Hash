@@ -29,7 +29,7 @@ force:
 clean: force
 	rm -f *.o
 	rm -f chain-hash
-	rm -f *.dSYM
+	rm -rf *.dSYM
 	$(MAKE) -C Singly-Linked-List/ clean
 
 ###############################################################################
