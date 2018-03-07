@@ -7,7 +7,7 @@
  *
  * CREATED:	    07/15/2017
  *
- * LAST EDITED:	    02/12/2018
+ * LAST EDITED:	    03/07/2018
  ***/
 
 /**
@@ -100,19 +100,14 @@ CHash * chash_init(int size,
  * RETURN:	    int -- 0 on success, 1 if the table already contains the
  *		    data, -1 if there is an error..
  *
- * NOTES:	    
+ * NOTES:	    none.
  ***/
 int chash_insert(CHash * tbl, const void * data)
 {
   if (data == NULL)
     return -1;
 
-  void * tmp = (void *)data;
-  if (chash_lookup(tbl, &tmp))
-    return 1;
-
   int bucket = tbl->hash(data) % tbl->buckets;
-  
   if (tbl->table[bucket] == NULL)
     return -1;
 
