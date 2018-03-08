@@ -38,6 +38,7 @@
 static _Noreturn void error_exit(char * msg);
 static int hash_func(const void *);
 static int match_func(const void *, const void *);
+void print_func(void *);
 #endif
 
 /*******************************************************************************
@@ -77,11 +78,11 @@ CHash * chash_init(int size,
 		 .match = match,
 		 .destroy = destroy,
 		 .size = 0,
-		 .table = calloc(size - 1, sizeof(list *))
+		 .table = calloc(size, sizeof(list *))
   };
 
   for (int i = 0; i < size; i++) {
-    if ((tbl->table[i] = list_create(tbl->destroy)) == NULL)
+    if ((tbl->table[i] = list_create(destroy)) == NULL)
       return NULL; /* TODO: chash_init - Fix in case of mem leak? */
   }
 
@@ -145,6 +146,7 @@ int chash_remove(CHash * tbl, void ** data)
       if (tbl->match(*data, list_data(elmt))) {
 
 	list_remnxt(tbl->table[bucket], prev, data);
+	tbl->destroy(data);
 	tbl->size--;
 	return 0;
 
@@ -236,8 +238,8 @@ void chash_traverse(CHash * tbl, void (*callback)(void *))
 void chash_destroy(CHash * tbl)
 {
   for (int i = 0; i < tbl->buckets; i++)
-    list_destroy(&tbl->table[i]);
-
+    list_destroy(&(tbl->table[i]));
+  free(tbl->table);
   free(tbl);
 }
 
@@ -248,32 +250,29 @@ void chash_destroy(CHash * tbl)
 #ifdef CONFIG_DEBUG_CHAIN_HASH
 int main(int argc, char * argv[]) {
 
-  CHash * hash = chash_init(10, hash_func, match_func, NULL);
+  CHash * hash = chash_init(10, hash_func, match_func, free);
   if (hash == NULL)
     error_exit("There was a problem in chash_init");
 
   int * pInt;
 
   srand((unsigned)time(NULL));
-  printf("===== INSERTING =====\n");
   for (int i = 0; i < 10; i++) {
     pInt = malloc(sizeof(int));
     *pInt = rand() % 20;
-    printf("int %d @ %p\n", *pInt, pInt);
     if(chash_insert(hash, (void *)pInt) < 0)
       error_exit("There was an error inserting pInt!");
   }
 
-  printf("===== REMOVING ======\n");
-  while (!chash_isempty(hash)) {
-    pInt = NULL;
-    if (chash_remove(hash, (void **)&pInt) < 0)
-      error_exit("There was an issue in chash_remove!");
-    printf("int %d @ %p\n", *pInt, pInt);
-  }
+  if (chash_size(hash) != 10)
+    error_exit("The size isn't right.");
 
+  pInt = NULL;
+  while (chash_remove(hash, (void **)&pInt) == 0)
+    free(pInt), pInt = NULL;
+
+  chash_traverse(hash, print_func);
   chash_destroy(hash);
-
 }
 #endif
 
@@ -334,6 +333,23 @@ static int hash_func(const void * data)
 static int match_func(const void * data1, const void * data2)
 {
   return *(int *)data1 == *(int *)data2;
+}
+
+/******************************************************************************
+ * FUNCTION:	    print_func
+ *
+ * DESCRIPTION:	    Print an entry from the hash table.
+ *
+ * ARGUMENTS:	    data: (void *) -- the entry from the hash table to print.
+ *
+ * RETURN:	    void.
+ *
+ * NOTES:	    none.
+ ***/
+void print_func(void * data)
+{
+  if (data != NULL)
+    printf("\tint %2d @ %p", *(int *)data, data);
 }
 #endif
 
