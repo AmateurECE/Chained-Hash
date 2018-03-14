@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
  * NAME:	    chain-hash.c
  *
  * AUTHOR:	    Ethan D. Twardy
@@ -7,8 +7,10 @@
  *
  * CREATED:	    07/15/2017
  *
- * LAST EDITED:	    03/07/2018
+ * LAST EDITED:	    03/14/2018
  ***/
+
+/* TODO: Implement more efficient searching for the hash table */
 
 /**
  * \brief Source code for the Chained-Hash table
@@ -16,7 +18,7 @@
  * This file contains the API functions and source code for testing.
  */
 
-/*******************************************************************************
+/******************************************************************************
  * INCLUDES
  ***/
 
@@ -30,7 +32,7 @@
 #include "chain-hash.h"
 #include "list.h"
 
-/*******************************************************************************
+/******************************************************************************
  * STATIC FUNCTION PROTOTYPES
  ***/
 
@@ -41,22 +43,22 @@ static int match_func(const void *, const void *);
 void print_func(void *);
 #endif
 
-/*******************************************************************************
+/******************************************************************************
  * API FUNCTIONS
  ***/
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    chash_init
  *
  * DESCRIPTION:	    Initializes and returns a CHash struct with the parameters.
  *
  * ARGUMENTS:	    size: (int) -- the size of the array. The size will remain
- *			constant if not compiled with CONFIG_DYNAMIC_STRUCTURES.
- *		    hash: (int (*)(const void *)) -- user-defined hash function.
+ *			constant if not compiled with CONFIG_DYNAMIC_STRUCTURES
+ *		    hash: (int (*)(const void *)) -- user-defined hash function
  *		    match: (int (*)(const void *, const void *) -- user defined
  *			function to compare two keys.
- *		    destroy: (void (*)(void *)) -- user-defined function to free
- *			allocated memory.
+ *		    destroy: (void (*)(void *)) -- user-defined function to
+ *			free allocated memory.
  *
  * RETURN:	    Reference to allocated CHash structure.
  *
@@ -89,7 +91,7 @@ CHash * chash_init(int size,
   return tbl;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    chash_insert
  *
  * DESCRIPTION:	    Inserts the data pointed to by data into the table, if it
@@ -119,7 +121,7 @@ int chash_insert(CHash * tbl, const void * data)
   return 0;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    chash_remove
  *
  * DESCRIPTION:	    Removes the data element specified by *data from the Hash
@@ -168,7 +170,7 @@ int chash_remove(CHash * tbl, void ** data)
   return -1;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    chash_lookup
  *
  * DESCRIPTION:	    Queries the hash table to determine if it already contains
@@ -201,14 +203,14 @@ int chash_lookup(CHash * tbl, void ** data)
   return 0;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    chash_traverse
  *
  * DESCRIPTION:	    Traverses the hash table and calls callback() on every
  *		    element.
  *
  * ARGUMENTS:	    tbl: (CHash *) -- the hash table in question.
- *		    callback: (void (*)(const void *)) -- the callback function.
+ *		    callback: (void (*)(const void *)) -- the callback function
  *
  * RETURN:	    void.
  *
@@ -221,7 +223,7 @@ void chash_traverse(CHash * tbl, void (*callback)(void *))
   }
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    chash_destroy
  *
  * DESCRIPTION:	    Removes all of the data from a chained hash table and frees
@@ -243,7 +245,7 @@ void chash_destroy(CHash * tbl)
   free(tbl);
 }
 
-/*******************************************************************************
+/******************************************************************************
  * MAIN
  ***/
 
@@ -276,12 +278,12 @@ int main(int argc, char * argv[]) {
 }
 #endif
 
-/*******************************************************************************
+/******************************************************************************
  * STATIC FUNCTIONS
  ***/
 
 #ifdef CONFIG_DEBUG_CHAIN_HASH
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    error_exit
  *
  * DESCRIPTION:	    The exit function. Called if there is an error. Prints msg
@@ -299,7 +301,7 @@ static _Noreturn void error_exit(char * msg)
   exit(1);
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    hash_func
  *
  * DESCRIPTION:	    Static function for hashing the data in the test hashtable.
@@ -308,7 +310,7 @@ static _Noreturn void error_exit(char * msg)
  *
  * RETURN:	    int -- the hash key for referring to the data in the table.
  *
- * NOTES:	    debug function -- not compiled in finished executable unless
+ * NOTES:	    debug function -- not present in finished executable unless
  *		    CONFIG_DEBUG_CHAIN_HASH is defined.
  ***/
 static int hash_func(const void * data)
@@ -316,7 +318,7 @@ static int hash_func(const void * data)
   return *(int *)data;
 }
 
-/*******************************************************************************
+/******************************************************************************
  * FUNCTION:	    match_func
  *
  * DESCRIPTION:	    Static function for comparing two data keys. Used for the
@@ -327,7 +329,7 @@ static int hash_func(const void * data)
  *
  * RETURN:	    int -- 1 if the two are the same, 0 otherwise.
  *
- * NOTES:	    debug function -- not compiled in finished executable unless
+ * NOTES:	    debug function -- not present in finished executable unless
  *		    CONFIG_DEBUG_CHAIN_HASH is defined.
  ***/
 static int match_func(const void * data1, const void * data2)
@@ -353,4 +355,4 @@ void print_func(void * data)
 }
 #endif
 
-/******************************************************************************/
+/*****************************************************************************/

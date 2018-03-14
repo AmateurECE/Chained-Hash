@@ -1,4 +1,4 @@
-/*******************************************************************************
+/******************************************************************************
  * NAME:	    chain-hash.h
  *
  * AUTHOR:	    Ethan D. Twardy
@@ -9,7 +9,7 @@
  *
  * CREATED:	    07/15/2017
  *
- * LAST EDITED:	    02/12/2018
+ * LAST EDITED:	    03/14/2018
  ***/
 
 /**
@@ -25,13 +25,13 @@
 #ifndef __ET_CHAIN_HASH_H__
 #define __ET_CHAIN_HASH_H__
 
-/*******************************************************************************
+/******************************************************************************
  * INCLUDES
  ***/
 
 #include "list.h"
 
-/*******************************************************************************
+/******************************************************************************
  * MACRO DEFINITIONS
  ***/
 
@@ -45,7 +45,7 @@
  */
 #define chash_isempty(Table) ((Table)->size == 0 ? 1 : 0)
 
-/*******************************************************************************
+/******************************************************************************
  * TYPE DEFINITIONS
  ***/
 
@@ -69,7 +69,7 @@ typedef struct _CHash_ {
 
 } CHash;
 
-/*******************************************************************************
+/******************************************************************************
  * API FUNCTION PROTOTYPES
  ***/
 
@@ -91,7 +91,7 @@ extern CHash * chash_init(int size,
  * \brief Function to free all data associated with the hash.
  * \param table The table to destroy.
  * \return void
- * \warning If \codetable->destroy\endcode is set to \c NULL, the data will not 
+ * \warning If \codetable->destroy\endcode is set to \c NULL, the data will not
  * be freed, and it is the responsibility of the programmer to manage this mem.
  */
 extern void chash_destroy(CHash * table);
@@ -133,4 +133,4 @@ extern int chash_lookup(CHash * table, void ** data);
 
 #endif /* __ET_CHAIN_HASH_H__ */
 
-/******************************************************************************/
+/*****************************************************************************/
